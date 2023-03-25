@@ -3,8 +3,27 @@
 
 <body>
     <h1>Hello World</h1>
-    <p>I'm hosted with GitHub Pages yup.</p>
+    <p>I'm hosted with GitHub Pages.</p>
+
+    <div id="container">
+        <!-- Existing content here -->
+    </div>
+
     <script>
+        // Create input field
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'Enter text here';
+
+        // Create button
+        const button = document.createElement('button');
+        button.textContent = 'Add';
+
+        // Add input field and button to container
+        const container = document.getElementById('container');
+        container.appendChild(input);
+        container.appendChild(button);
+
         const SENSOR_ONE_HYD = [
             "BCTE (BICART and Select mode SWBK)",
             "SWP1",
