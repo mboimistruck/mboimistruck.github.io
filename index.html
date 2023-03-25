@@ -348,7 +348,7 @@
             const arrayType = sensorTypeInput.value;
             const diff = findDifferences(prevHex, currHex, arrayType);
             let diffOutput = document.getElementById("diffOutput");
-            let outputString = "Diff:<br>";
+            let outputString = "The following sensors have changed (0 off, 1 on):<br>";
             for (let key in diff) {
                 outputString += key + ": " + diff[key] + "<br>";
             }
