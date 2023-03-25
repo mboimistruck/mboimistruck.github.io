@@ -1,7 +1,209 @@
 <!DOCTYPE html>
 <html>
+
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <h1>Hello World</h1>
+    <p>I'm hosted with GitHub Pages.</p>
+    <script>
+        const SENSOR_ONE_HYD = [
+            "BCTE (BICART and Select mode SWBK)",
+            "SWP1",
+            "AFBK (AFB Mode)",
+            "LFD",
+            "SCTE (and Select Mode SWSeK",
+            "AFB (AFB Mode)",
+            "ACE (Select Mode SWAK)",
+            "SWCON",
+            "CLDI",
+            "PFS",
+            "PO",
+            "PI",
+            "LD2",
+            "LD1",
+            "LP",
+            "BCE (bicarbonate bag mode)",
+        ];
+
+        const SENSOR_TWO_HYD = [
+            "ACE (ACETATE mode)",
+            "SWDCSIN",
+            "PDG",
+            "SWSeK1",
+            "LFS (AIR ON ps)",
+            "SWDCSOUT",
+            "SWSeK2",
+            "PDRAIN",
+            "SWLOWUF1",
+            "SWAK",
+            "SWB",
+            "SWA",
+            "SWLOWUF2",
+            "SWBK",
+            "LFP",
+            "SWP",
+        ];
+
+        const SENSOR_THREE_HYD = [
+            "SWPOL",
+            "SWAFB",
+            "SWBC",
+            "SWA1C",
+            "SWA2C",
+            "SWCON2",
+            "SWUFCOVL",
+            "SWUFCOVR",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        ];
+
+        const SENSOR_ONE_BLD = [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "DRAIN_VALVE",
+            "",
+            "INF_CLAMP_LUC",
+            "SN_VALVE",
+            "ONLINE_SWITCH",
+            "DN_VALVE",
+            "HD_SWITCH",
+            "AIR_COMPRESSOR",
+            "PRESSURE_SWITCH",
+            "ONLINE door",
+            "BVS-AD door",
+        ];
+
+        const SENSOR_TWO_BLD = [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "HEPARIN_UP_LIMIT",
+            "HEPARIN_LOW_LIMIT",
+            "HEPARIN_DIRECTION",
+            "CVP",
+            "VPP",
+            "VCP",
+            "INF_CLAMP_POS",
+            "CAP",
+            "APP",
+            "ACP",
+        ];
+
+        const SENSOR_ONE_PRO = [
+            "BC",
+            "SWAC1",
+            "SWAC2",
+            "SWFS2",
+            "SWFS1",
+            "Ven. Clamp pos.",
+            "EVR1",
+            "EVDS1",
+            "EVD2",
+            "EVBP2",
+            "EV2",
+            "EVDrain",
+            "EVDS2",
+            "AIR pres.",
+            "AP STOP",
+            "Ven. Clamp Line",
+        ];
+
+        const SENSOR_TWO_PRO = [
+            "",
+            "",
+            "Inf. Line Switch",
+            "SWB",
+            "SWA",
+            "SWB2",
+            "SWA2",
+            "OSSO2",
+            "OSSO1",
+            "EVS",
+            "EVD",
+            "EVC",
+            "EVA",
+            "PTS Venous Line",
+            "Art. Clamp pos.",
+            "Art. Clamp Line",
+        ];
+
+        const VALVE_ONE_HYD = [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "EVBHE",
+            "WATVAL",
+            "EVW1",
+            "EVDRAIN",
+            "EVW2",
+            "EVBP2",
+            "EVPRIM1",
+            "EVPRIM",
+            "EVS",
+            "EVC",
+            "EVD",
+        ];
+
+        const VALVE_TWO_HYD = [
+            "EVH20",
+            "EVHE",
+            "EVDS2",
+            "EVDEG",
+            "EV1S",
+            "EVP",
+            "EVD1",
+            "EVA",
+            "EVPB",
+            "EVPS",
+            "EVDS1",
+            "EVD2",
+            "EVPA",
+            "EVFLUSH",
+            "EV2",
+            "EVR1"
+        ];
+        function hexToBin(hexNum) {
+            let binNum = parseInt(hexNum, 16).toString(2); // convert to binary
+            return binNum.padStart(16, '0'); // fill with missing 0s until 16 bit length
+        }
+
+        function findDifferences(prevHex, currentHex, arrayType) {
+            let prev = hexToBin(prevHex);
+            let curr = hexToBin(currentHex);
+
+            let diffMap = {};
+            for (let i = 0; i < prev.length; i++) {
+                if (prev[i] !== curr[i]) {
+                    let sensorName;
+                    if (arrayType === '1') {
+                        sensorName = SENSOR_ONE_HYD[i];
+                    } else if (arrayType === '2') {
+                        sensorName = SENSOR_TWO_HYD[i];
+                    }
+                    diffMap[sensorName] = curr[i]; // populate map with sensor name and diff
+                }
+            }
+
+            return diffMap;
+        }
+
+        let diff = findDifferences(prompt(), prompt(), prompt()); // compare two values to get diff
+
+        console.log(diff);
+    </script>
 </body>
+
 </html>
