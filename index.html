@@ -1,38 +1,105 @@
 <!DOCTYPE html>
 <html>
 
-<body>
-    <h1>Hello World</h1>
-    <p>I'm hosted with GitHub Pages.</p>
+<head>
+    <style>
+        .collapsible {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
 
-    <div id="container">
-        <!-- Existing content here -->
+        .active,
+        .collapsible:hover {
+            background-color: #ccc;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <h1>Display the changes between two hex values</h1>
+    <div>
+        <label>Previous Hex:</label>
+        <input type="text" id="prevHex">
+    </div>
+    <div>
+        <label>Current Hex:</label>
+        <input type="text" id="currHex">
+    </div>
+    <div>
+        <label>Sensor Type:</label>
+        <input type="text" id="sensorType">
+    </div>
+    <button id="submitButton">Submit</button>
+    <button class="collapsible">(1) SENSOR_ONE_HYD</button>
+    <div class="content">
+        <ul id="SENSOR_ONE_HYD"></ul>
     </div>
 
+    <button class="collapsible">(2) SENSOR_TWO_HYD</button>
+    <div class="content">
+        <ul id="SENSOR_TWO_HYD"></ul>
+    </div>
+
+    <button class="collapsible">(3) SENSOR_THREE_HYD</button>
+    <div class="content">
+        <ul id="SENSOR_THREE_HYD"></ul>
+    </div>
+
+    <button class="collapsible">(4) SENSOR_ONE_BLD</button>
+    <div class="content">
+        <ul id="SENSOR_ONE_BLD"></ul>
+    </div>
+
+    <button class="collapsible">(5) SENSOR_TWO_BLD</button>
+    <div class="content">
+        <ul id="SENSOR_TWO_BLD"></ul>
+    </div>
+
+    <button class="collapsible">(6) SENSOR_ONE_PRO</button>
+    <div class="content">
+        <ul id="SENSOR_ONE_PRO"></ul>
+    </div>
+
+    <button class="collapsible">(7) SENSOR_TWO_PRO</button>
+    <div class="content">
+        <ul id="SENSOR_TWO_PRO"></ul>
+    </div>
+
+    <button class="collapsible">(8) VALVE_ONE_HYD</button>
+    <div class="content">
+        <ul id="VALVE_ONE_HYD"></ul>
+    </div>
+
+    <button class="collapsible">(9) VALVE_TWO_HYD</button>
+    <div class="content">
+        <ul id="VALVE_TWO_HYD"></ul>
+    </div>
+
+    <div id="diffOutput"></div>
+
+
     <script>
-        // Create input field
-        const firstValueInput = document.createElement("input");
-        firstValueInput.type = "text";
-        firstValueInput.placeholder = "Enter the first hex value here";
-
-        const secondValueInput = document.createElement("input");
-        secondValueInput.type = "text";
-        secondValueInput.placeholder = "Enter the second hex value here";
-
-        const thirdValueInput = document.createElement("input");
-        thirdValueInput.type = "text";
-        thirdValueInput.placeholder = "Enter the sensor profile you're using (e.g. 1 = SENSOR_ONE_HYD)";
-
-        // Create button
-        const button = document.createElement("button");
-        button.textContent = "Convert";
-
-        // Add input field and button to container
-        const container = document.getElementById("container");
-        container.appendChild(firstValueInput);
-        container.appendChild(secondValueInput);
-        container.appendChild(thirdValueInput);
-        container.appendChild(button);
+        // Select the button and input fields
+        const submitButton = document.getElementById("submitButton");
+        const prevHexInput = document.getElementById("prevHex");
+        const currHexInput = document.getElementById("currHex");
+        const sensorTypeInput = document.getElementById("sensorType");
 
         const SENSOR_ONE_HYD = [
             "BCTE (BICART and Select mode SWBK)",
@@ -204,9 +271,44 @@
             "EV2",
             "EVR1"
         ];
+
+        const createList = (list, parent) => {
+            list.forEach((item) => {
+                const li = document.createElement("li");
+                li.textContent = item;
+                parent.appendChild(li);
+            });
+        };
+
+        const initCollapsible = () => {
+            const coll = document.getElementsByClassName("collapsible");
+            for (let i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    const content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        };
+
+        createList(SENSOR_ONE_HYD, document.getElementById("SENSOR_ONE_HYD"));
+        createList(SENSOR_TWO_HYD, document.getElementById("SENSOR_TWO_HYD"));
+        createList(SENSOR_THREE_HYD, document.getElementById("SENSOR_THREE_HYD"));
+        createList(SENSOR_ONE_BLD, document.getElementById("SENSOR_ONE_BLD"));
+        createList(SENSOR_TWO_BLD, document.getElementById("SENSOR_TWO_BLD"));
+        createList(SENSOR_ONE_PRO, document.getElementById("SENSOR_ONE_PRO"));
+        createList(SENSOR_TWO_PRO, document.getElementById("SENSOR_TWO_PRO"));
+        createList(VALVE_ONE_HYD, document.getElementById("VALVE_ONE_HYD"));
+        createList(VALVE_TWO_HYD, document.getElementById("VALVE_TWO_HYD"));
+
+        initCollapsible();
         function hexToBin(hexNum) {
             let binNum = parseInt(hexNum, 16).toString(2); // convert to binary
-            return binNum.padStart(16, '0'); // fill with missing 0s until 16 bit length
+            return binNum.padStart(16, "0"); // fill with missing 0s until 16 bit length
         }
 
         function findDifferences(prevHex, currentHex, arrayType) {
@@ -217,10 +319,24 @@
             for (let i = 0; i < prev.length; i++) {
                 if (prev[i] !== curr[i]) {
                     let sensorName;
-                    if (arrayType === '1') {
+                    if (arrayType === "1") {
                         sensorName = SENSOR_ONE_HYD[i];
-                    } else if (arrayType === '2') {
+                    } else if (arrayType === "2") {
                         sensorName = SENSOR_TWO_HYD[i];
+                    } else if (arrayType === "3") {
+                        sensorName = SENSOR_THREE_HYD[i];
+                    } else if (arrayType === "4") {
+                        sensorName = SENSOR_ONE_BLD[i];
+                    } else if (arrayType === "5") {
+                        sensorName = SENSOR_TWO_BLD[i];
+                    } else if (arrayType === "6") {
+                        sensorName = SENSOR_ONE_PRO[i];
+                    } else if (arrayType === "7") {
+                        sensorName = SENSOR_TWO_PRO[i];
+                    } else if (arrayType === "8") {
+                        sensorName = VALVE_ONE_HYD[i];
+                    } else if (arrayType === "9") {
+                        sensorName = VALVE_TWO_HYD[i];
                     }
                     diffMap[sensorName] = curr[i]; // populate map with sensor name and diff
                 }
@@ -228,10 +344,20 @@
 
             return diffMap;
         }
+        submitButton.addEventListener("click", function () {
+            const prevHex = prevHexInput.value;
+            const currHex = currHexInput.value;
+            const arrayType = sensorTypeInput.value;
+            const diff = findDifferences(prevHex, currHex, arrayType);
+            let diffOutput = document.getElementById("diffOutput");
+            let outputString = "Diff:<br>";
+            for (let key in diff) {
+                outputString += key + ": " + diff[key] + "<br>";
+            }
+            diffOutput.innerHTML = outputString;
+            console.log(diff);
+        });
 
-        let diff = findDifferences(prompt(), prompt(), prompt()); // compare two values to get diff
-
-        console.log(diff);
     </script>
 </body>
 
